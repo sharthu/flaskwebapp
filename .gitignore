@@ -1,0 +1,46 @@
+# Python Virtual Environment
+venv/
+env/
+*.venv
+
+# Python Bytecode and Cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Python Package Installation Files
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Flask Specific
+instance/
+*.log
+
+# Docker Files
+*.dockerignore
+Dockerfile.*
+
+# Frontend Build Artifacts (optional, if you add tools like Webpack later)
+node_modules/
+dist/
+*.min.js
+
+# GitHub Actions Artifacts
+*.zip
+*.tar.gz
+
+# Editor/IDE Files
+*.idea/
+*.vscode/
+*.sublime-*
+
+# OS Generated Files
+.DS_Store
+Thumbs.db
+
+# Miscellaneous
+*.bak
+*.swp
+*.tmp
