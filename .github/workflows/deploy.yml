@@ -1,0 +1,44 @@
+name: Deploy Flask App
+
+on:
+  push:
+    branches:
+      - main  # Run this workflow only on `main` branch push
+
+jobs:
+  deploy:
+    runs-on: self-hosted  # Use SVR01 as GitHub Runner
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Build and Push Backend Image
+        run: |
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/flask-backend:latest ./backend
+          docker push ${{ secrets.DOCKER_USERNAME }}/flask-backend:latest
+
+      - name: Build and Push Frontend Image
+        run: |
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/flask-frontend:latest ./frontend
+          docker push ${{ secrets.DOCKER_USERNAME }}/flask-frontend:latest
+
+      - name: SSH into SVR02 and Deploy Containers
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: "192.168.100.102"  # SVR02 IP Address
+          username: ubuntu
+          key: ${{ secrets.SVR02_SSH_KEY }}  # Add Private Key in GitHub Secrets
+          script: |
+            docker stop flask-backend flask-frontend || true
+            docker rm flask-backend flask-frontend || true
+            docker pull ${{ secrets.DOCKER_USERNAME }}/flask-backend:latest
+            docker pull ${{ secrets.DOCKER_USERNAME }}/flask-frontend:latest
+            docker run -d --name flask-backend -p 5000:5000 --network mynetwork ${{ secrets.DOCKER_USERNAME }}/flask-backend:latest
+            docker run -d --name flask-frontend -p 80:80 --network mynetwork ${{ secrets.DOCKER_USERNAME }}/flask-frontend:latest
