@@ -1,10 +1,10 @@
 version: '3'
 services:
   backend:
-    build: ./backend
+    image: sharthu/flask-backend:latest
     ports:
       - "5000:5000"
   frontend:
-    build: ./frontend
+    image: sharthu/flask-frontend:latest
     ports:
       - "80:80"
