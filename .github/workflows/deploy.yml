@@ -22,7 +22,7 @@ jobs:
         run: |
           ssh sharthu@192.168.100.102 << 'EOF'
             # Download docker-compose.yml from GitHub
-            curl -o /tmp/docker-compose.yml https://raw.githubusercontent.com/yourusername/your-repo/main/docker-compose.yml
+            curl -o /tmp/docker-compose.yml https://github.com/sharthu/flaskwebapp/blob/main/.github/workflows/deploy.yml
             # Deploy using the downloaded file
             docker-compose -f /tmp/docker-compose.yml pull
             docker-compose -f /tmp/docker-compose.yml down
