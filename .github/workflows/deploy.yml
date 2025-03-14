@@ -10,14 +10,23 @@ jobs:
       - name: Build and Push Backend
         run: |
           cd backend
-          docker build -t yourusername/flask-backend:latest .
+          docker build -t sharthu/flask-backend:latest .
           echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
-          docker push yourusername/flask-backend:latest
+          docker push sharthu/flask-backend:latest
       - name: Build and Push Frontend
         run: |
           cd frontend
-          docker build -t yourusername/flask-frontend:latest .
-          docker push yourusername/flask-frontend:latest
+          docker build -t sharthu/flask-frontend:latest .
+          docker push sharthu/flask-frontend:latest
       - name: Deploy to SVR02
         run: |
-          ssh user@192.168.100.102 'docker-compose -f /path/to/docker-compose.yml down && docker-compose -f /path/to/docker-compose.yml up -d'
+          ssh sharthu@192.168.100.102 << 'EOF'
+            # Download docker-compose.yml from GitHub
+            curl -o /tmp/docker-compose.yml https://raw.githubusercontent.com/yourusername/your-repo/main/docker-compose.yml
+            # Deploy using the downloaded file
+            docker-compose -f /tmp/docker-compose.yml pull
+            docker-compose -f /tmp/docker-compose.yml down
+            docker-compose -f /tmp/docker-compose.yml up -d
+            # Clean up
+            rm /tmp/docker-compose.yml
+          EOF
