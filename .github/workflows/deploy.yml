@@ -20,7 +20,7 @@ jobs:
           docker push sharthu/flask-frontend:latest
       - name: Deploy to SVR02
         run: |
-          ssh sharthu@192.168.100.102 << 'EOF'
+          ssh -i "id_rsa" sharthu@192.168.100.102 << 'EOF'
             # Download docker-compose.yml from GitHub
             curl -o /tmp/docker-compose.yml https://github.com/sharthu/flaskwebapp/blob/main/.github/workflows/deploy.yml
             # Deploy using the downloaded file
