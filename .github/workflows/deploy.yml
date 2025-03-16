@@ -23,10 +23,10 @@ jobs:
           ssh -i "id_rsa" sharthu@192.168.100.102 << 'EOF'
             # Download docker-compose.yml from GitHub
             pwd
-            curl -o flaskwebapp/docker-compose.yml https://github.com/sharthu/flaskwebapp/blob/main/docker-compose.yml
+            curl -o /home/sharthu/flaskwebapp/docker-compose.yml https://github.com/sharthu/flaskwebapp/blob/main/docker-compose.yml
             # Deploy using the downloaded file
-            docker-compose -f flaskwebapp/docker-compose.yml build
-            docker-compose -f flaskwebapp/docker-compose.yml up -d
+            docker-compose -f /home/sharthu/flaskwebapp/docker-compose.yml build
+            docker-compose -f /home/sharthu/flaskwebapp/docker-compose.yml up -d
             # Clean up
-            rm flaskwebapp/docker-compose.yml
+            rm /home/sharthu/flaskwebapp/docker-compose.yml
           EOF
